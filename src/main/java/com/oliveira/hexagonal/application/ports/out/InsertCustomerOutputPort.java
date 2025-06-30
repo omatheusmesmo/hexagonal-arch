@@ -4,5 +4,5 @@ import com.oliveira.hexagonal.application.core.domain.Customer;
 
 public interface InsertCustomerOutputPort {
 
-    Void insert(Customer customer);
+    void insert(Customer customer);
 }

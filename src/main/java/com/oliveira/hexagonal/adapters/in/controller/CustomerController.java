@@ -4,12 +4,14 @@ import com.oliveira.hexagonal.adapters.in.controller.mapper.CustomerMapper;
 import com.oliveira.hexagonal.adapters.in.controller.request.CustomerRequest;
 import com.oliveira.hexagonal.adapters.in.controller.response.CustomerResponse;
 import com.oliveira.hexagonal.application.core.domain.Customer;
+import com.oliveira.hexagonal.application.ports.in.DeleteCustomerByIdInputPort;
 import com.oliveira.hexagonal.application.ports.in.FindCustomerByIdInputPort;
 import com.oliveira.hexagonal.application.ports.in.InsertCustomerInputPort;
 import com.oliveira.hexagonal.application.ports.in.UpdateCustomerInputPort;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,6 +32,9 @@ public class CustomerController {
 
     @Autowired
     private UpdateCustomerInputPort updateCustomerInputPort;
+
+    @Autowired
+    private DeleteCustomerByIdInputPort deleteCustomerByIdInputPort;
     
     @Autowired
     private CustomerMapper customerMapper;
@@ -54,6 +59,12 @@ public class CustomerController {
         Customer customer = customerMapper.toCustomer(customerRequest);
         customer.setId(id);
         updateCustomerInputPort.update(customer, customerRequest.getZipCode());
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable final String id){
+        deleteCustomerByIdInputPort.delete(id);
         return ResponseEntity.noContent().build();
     }
 }
